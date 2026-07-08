@@ -1,0 +1,10 @@
+services:
+  lk-login:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ldc-lk-login:latest
+    container_name: ldc-lk-login
+    ports:
+      - "8080:80"
+    restart: unless-stopped
