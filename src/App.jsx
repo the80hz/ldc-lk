@@ -114,6 +114,17 @@ function App() {
 
     return value.replace(/\D/g, '').length >= 10;
   }, [method, value]);
+  const showValidation = submitted && !isValid;
+  const showSuccess = submitted && isValid;
+  const fieldMessage = showValidation
+    ? method === 'email'
+      ? 'Проверьте формат email.'
+      : 'Введите номер телефона полностью.'
+    : showSuccess
+      ? method === 'email'
+        ? 'Запрос принят. Проверьте код в письме.'
+        : 'Запрос принят. Проверьте код в MAX.'
+      : 'Код придет только для зарегистрированного контакта.';
 
   const handleMethodChange = (nextMethod) => {
     setMethod(nextMethod);
@@ -129,6 +140,7 @@ function App() {
   const handleValueChange = (event) => {
     const nextValue = event.target.value;
     setValue(method === 'max' ? formatPhone(nextValue) : nextValue);
+    setSubmitted(false);
   };
 
   return (
@@ -173,17 +185,22 @@ function App() {
               type={method === 'email' ? 'email' : 'tel'}
               inputMode={active.inputMode}
               autoComplete={method === 'email' ? 'email' : 'tel'}
+              enterKeyHint="send"
+              maxLength={method === 'email' ? 80 : 16}
               placeholder={active.inputPlaceholder}
+              required
               value={value}
               onChange={handleValueChange}
+              className={showValidation ? 'invalid' : ''}
               aria-describedby="field-hint"
+              aria-invalid={showValidation}
             />
-            <p id="field-hint" className={submitted && !isValid ? 'hint error' : 'hint'}>
-              {submitted && !isValid
-                ? method === 'email'
-                  ? 'Проверьте формат email.'
-                  : 'Введите номер телефона полностью.'
-                : 'Код придет только для зарегистрированного контакта.'}
+            <p
+              id="field-hint"
+              className={`hint ${showValidation ? 'error' : ''} ${showSuccess ? 'success' : ''}`}
+              aria-live="polite"
+            >
+              {fieldMessage}
             </p>
 
             <button className="primary-button" type="submit">

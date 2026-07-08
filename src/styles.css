@@ -189,6 +189,10 @@ h1 {
   border-color: var(--blue);
 }
 
+.login-form input.invalid {
+  border-color: #b42318;
+}
+
 .login-form input::placeholder {
   color: #a4afb8;
 }
@@ -203,6 +207,11 @@ h1 {
 
 .hint.error {
   color: #b42318;
+}
+
+.hint.success {
+  color: #087443;
+  font-weight: 700;
 }
 
 .primary-button,
